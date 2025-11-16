@@ -21,6 +21,9 @@ namespace Deploy.Cachorro.Api.Controllers
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
+            //_logger.LogInformation("Teste de Information...");
+            //_logger.LogError("Teste de Error...");
+
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
