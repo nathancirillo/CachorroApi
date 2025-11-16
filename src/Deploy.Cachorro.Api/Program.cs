@@ -1,5 +1,4 @@
-
-using Microsoft.ApplicationInsights.Extensibility.PerfCounterCollector.QuickPulse;
+using Deploy.Cachorro.Api.Extensoes.Telemetria;
 
 namespace Deploy.Cachorro.Api
 {
@@ -9,44 +8,23 @@ namespace Deploy.Cachorro.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Logging.ClearProviders();
-            builder.Logging.AddConsole();
-            builder.Logging.AddDebug();
             builder.Services.AddControllers();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-            //builder.Services.AddOpenApi();
 
             builder.Services.AddEndpointsApiExplorer();
+
             builder.Services.AddSwaggerGen();
 
-            builder.Logging.AddApplicationInsights(
-                configureTelemetryConfiguration: (config) =>
-                {
-                    config.ConnectionString = builder.Configuration.GetSection("ConnectionsString:ApplicationInsights").Value;
-                },
-                configureApplicationInsightsLoggerOptions: (options) =>
-                {
+            builder.Logging.AddLogging(builder.Configuration);
 
-                }
-            );
-
-
-            builder.Services.AddApplicationInsightsTelemetry(options =>
-            {
-               options.ConnectionString = builder.Configuration.GetSection("ConnectionsString:ApplicationInsights").Value;
-            })
-           .ConfigureTelemetryModule<QuickPulseTelemetryModule>((module, o) =>
-            {
-                module.AuthenticationApiKey = builder.Configuration.GetSection("ApplicationInsights:Api-Key").Value;
-            });
+            builder.Services.AddTelemetria(builder.Configuration);
 
             var app = builder.Build();
 
 
             // if (app.Environment.IsDevelopment())
             //{
-                app.UseSwagger();
-                app.UseSwaggerUI();
+            app.UseSwagger();
+            app.UseSwaggerUI();
             //}
 
             // Configure the HTTP request pipeline.
