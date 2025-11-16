@@ -1,3 +1,4 @@
+using Deploy.Cachorro.Api.Extensoes.Swagger;
 using Deploy.Cachorro.Api.Extensoes.Telemetria;
 
 namespace Deploy.Cachorro.Api
@@ -10,28 +11,21 @@ namespace Deploy.Cachorro.Api
 
             builder.Services.AddControllers();
 
-            builder.Services.AddEndpointsApiExplorer();
-
-            builder.Services.AddSwaggerGen();
-
+            //Extensions
             builder.Logging.AddLogging(builder.Configuration);
 
             builder.Services.AddTelemetria(builder.Configuration);
 
+            builder.Services.AddSwagger();
+
+
+
             var app = builder.Build();
 
+            //Extensions
+            app.UseSwaggerDEPLOY();
+            
 
-            // if (app.Environment.IsDevelopment())
-            //{
-            app.UseSwagger();
-            app.UseSwaggerUI();
-            //}
-
-            // Configure the HTTP request pipeline.
-            //if (app.Environment.IsDevelopment())
-            //{
-            //    app.MapOpenApi();
-            //}
 
             app.UseHttpsRedirection();
 
